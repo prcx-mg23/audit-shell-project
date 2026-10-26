@@ -1,5 +1,12 @@
 #!/bin/bash
 
+DIR=$(cd "$(dirname "$0")" && pwd) # répertoire du script
+LOG="$DIR/logs/audit.log"
+DATE=$(date '+%Y-%m-%d_%H-%M-%S')
+RAPPORT="$DIR/reports/audit_$DATE.txt"
+
+
+
 
 # Affiche la liste des option
 afficher_aide(){
@@ -26,19 +33,61 @@ audit_securite() {
     echo "Audit sécurité"
 }
 
+# Fonction pour journaliser les messages dans le fichier de log
+journaliser() {
+    echo "[$(date '+%F %T')] $1" >> "$LOG"
+}
+
+# Fonction pour écrire l'en-tête du rapport d'audit
+ecrire_entete() {
+    {
+    echo "RAPPORT D'AUDIT"
+    echo "Date : $(date '+%F %T')"
+    echo "Machine : $(hostname)"
+    echo "Utilisateur : $(whoami)"
+    echo
+    } > "$RAPPORT"
+}
+
+
+#### MAIN ####
+mkdir -p "$DIR/logs" "$DIR/reports" "$DIR/archives"
+
 # Condition qui vérifie le nombre d'arguments
 if [ "$#" -ne 1 ]; then
     afficher_aide
     exit 1
 fi
 
+if [ ! -r "$DIR/config/targets.conf" ]; then    
+    echo "Fichier de configuration des cibles introuvable."
+    exit 2;
+fi
+
+
 # Traitement et choix de l'option
 case "$1" in
-    --system)    audit_systeme ;;
-    --network)   audit_reseau  ;;
-    --security)  audit_securite ;;
-    --all)       audit_systeme ; audit_reseau ; audit_securite ;;
-    --help)      afficher_aide ;;
+    --system)   ecrire_entete 
+                journaliser 
+                audit_systeme ;;
+    --network)  
+                ecrire_entete 
+                journaliser 
+                audit_reseau  ;;
+    
+    --security)  ecrire_entete 
+                journaliser 
+                audit_securite ;;
+    --all)       
+                ecrire_entete 
+                journaliser 
+                audit_systeme ; audit_reseau ; audit_securite ;;
+    --help)      
+                afficher_aide ;;
     *)           
-        
+        echo "Option inconue : $1"
+        afficher_aide
+        exit 1;;
 esac
+
+
