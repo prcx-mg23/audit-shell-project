@@ -20,7 +20,22 @@ afficher_aide(){
 
 # Fonction Audit du système
 audit_systeme() {
-    echo "Audit système"
+    {
+        echo "[1] Informations système"
+        echo "Noyau : $(uname -r)"
+        echo "Démarrée : $(uptime -p)"
+        echo
+        echo "Mémoire :"
+        free -h
+        echo
+        echo "Disque racine :"
+        df -h /
+        echo
+        echo "Les 5 processus les plus gourmands :"
+        ps aux --sort=-%cpu | head -n 6
+        echo
+    } >> "$RAPPORT"
+    journaliser "Audit système terminé"
 }
 
 # Fonction Audit réseau
