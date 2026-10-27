@@ -4,8 +4,8 @@ DIR=$(cd "$(dirname "$0")" && pwd) # répertoire du script
 LOG="$DIR/logs/audit.log"
 DATE=$(date '+%Y-%m-%d_%H-%M-%S')
 RAPPORT="$DIR/reports/audit_$DATE.txt"
-
-
+NB_OK=0
+NB_ERREUR=0
 
 
 # Affiche la liste des option
@@ -40,7 +40,20 @@ audit_systeme() {
 
 # Fonction Audit réseau
 audit_reseau() {
-    echo "Audit réseau"
+    echo "[2] Test réseau">> "$RAPPORT"
+    while read -r cible; do
+    if [ -z "$cible" ] || [ "${cible:0:1}" = "#" ]; then
+    continue # ligne vide ou commentaire
+    fi
+    if ping -c 1 -W 1 "$cible" > /dev/null 2>&1; then
+    echo "[OK] $cible répond" >> "$RAPPORT"
+    NB_OK=$((NB_OK + 1))
+    else
+    echo "[ERREUR] $cible ne répond pas" >> "$RAPPORT"
+    NB_ERREUR=$((NB_ERREUR + 1))
+    fi
+    done < "$DIR/config/targets.conf"
+    journaliser "Audit réseau terminé"
 }
 
 # Fonction Audit de sécurité
@@ -83,19 +96,15 @@ fi
 # Traitement et choix de l'option
 case "$1" in
     --system)   ecrire_entete 
-                journaliser 
                 audit_systeme ;;
     --network)  
                 ecrire_entete 
-                journaliser 
                 audit_reseau  ;;
     
     --security)  ecrire_entete 
-                journaliser 
                 audit_securite ;;
     --all)       
                 ecrire_entete 
-                journaliser 
                 audit_systeme ; audit_reseau ; audit_securite ;;
     --help)      
                 afficher_aide ;;
@@ -104,5 +113,4 @@ case "$1" in
         afficher_aide
         exit 1;;
 esac
-
 
