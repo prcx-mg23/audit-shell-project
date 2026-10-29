@@ -49,13 +49,14 @@ audit_reseau() {
     fi
     if ping -c 1 -W 1 "$cible" > /dev/null 2>&1; then
     echo "[OK] $cible répond" >> "$RAPPORT"
-    NB_OK=$((NB_TESTS_OK + 1))
+    NB_TESTS_OK=$((NB_TESTS_OK + 1))
     else
     echo "[ERREUR] $cible ne répond pas" >> "$RAPPORT"
-    NB_ERREUR=$((NB_TESTS_ERREUR + 1))
+    NB_TESTS_ERREUR=$((NB_TESTS_ERREUR + 1))
     fi
     done < "$DIR/config/targets.conf"
     journaliser "Audit réseau terminé"
+    
 }
 
 # Fonction Audit de sécurité
@@ -134,10 +135,13 @@ case "$1" in
                 audit_reseau  ;;
     
     --security)  ecrire_entete 
+
                 audit_securite ;;
     --all)       
                 ecrire_entete 
                 audit_systeme ; audit_reseau ; audit_securite ; archiver_rapport;;
+         
+                
     --help)      
                 afficher_aide ;;
     *)           
@@ -147,8 +151,9 @@ case "$1" in
 esac
 
 ecrire_resume
-journaliser "Audit $1 terminé"
-
 
 echo "Rapport créé : reports/$(basename "$RAPPORT")"
-echo "Tests OK : $NB_OK - Tests en échec : $NB_ERREUR"
+if [ "$1" = "--network" ] || [ "$1" = "--all" ]; then
+    echo "Tests OK : $NB_TESTS_OK - Tests en échec : $NB_TESTS_ERREUR"
+fi
+
