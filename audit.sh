@@ -4,8 +4,10 @@ DIR=$(cd "$(dirname "$0")" && pwd) # répertoire du script
 LOG="$DIR/logs/audit.log"
 DATE=$(date '+%Y-%m-%d_%H-%M-%S')
 RAPPORT="$DIR/reports/audit_$DATE.txt"
-NB_OK=0
-NB_ERREUR=0
+
+# Compteurs pour les tests réussis et échoués
+NB_TESTS_OK=0
+NB_TESTS_ERREUR=0
 
 
 # Affiche la liste des option
@@ -78,6 +80,24 @@ journaliser() {
     echo "[$(date '+%F %T')] $1" >> "$LOG"
 }
 
+# Fonction résumé
+
+ecrire_resume() {
+    {
+        echo "[4] Résumé"
+        echo "Tests OK : $NB_TESTS_OK"
+        echo "Tests en échec : $NB_TESTS_ERREUR"
+    } >> "$RAPPORT"
+}
+
+# Fonction qui archive le rapport
+
+archiver_rapport() {
+    archive="$DIR/archives/audit_$DATE.tar.gz"
+    tar -czf "$archive" -C "$DIR/reports" "$(basename "$RAPPORT")"
+    journaliser "Archive créée : $(basename "$archive")"
+}
+
 # Fonction pour écrire l'en-tête du rapport d'audit
 ecrire_entete() {
     {
@@ -126,3 +146,9 @@ case "$1" in
         exit 1;;
 esac
 
+ecrire_resume
+journaliser "Audit $1 terminé"
+archiver_rapport
+
+echo "Rapport créé : reports/$(basename "$RAPPORT")"
+echo "Tests OK : $NB_OK - Tests en échec : $NB_ERREUR"
