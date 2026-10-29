@@ -58,9 +58,21 @@ audit_reseau() {
 
 # Fonction Audit de sécurité
 audit_securite() {
-    echo "Audit sécurité"
+    {
+        echo "[3] Analyse de sécurité"
+        echo "Comptes avec un shell bash : "
+        grep 'bash$' /etc/passwd | cut -d: -f1
+        echo
+        echo "Ports en écoute : "
+        ss -tuln
+        echo
+        echo "Fichiers en mode 777 dans $HOME :"
+        find "$HOME" -type f -perm 0777 2>/dev/null
+        echo
+        echo "(Indicateurs à examiner, pas une preuve de vulnérabilité)"
+    } >> "$RAPPORT"
+    journaliser "Audit de sécurité terminé" 
 }
-
 # Fonction pour journaliser les messages dans le fichier de log
 journaliser() {
     echo "[$(date '+%F %T')] $1" >> "$LOG"
