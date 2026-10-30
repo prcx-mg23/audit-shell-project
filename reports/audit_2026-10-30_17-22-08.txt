@@ -1,0 +1,26 @@
+RAPPORT D'AUDIT
+Date : 2026-10-30 17:22:08
+Machine : root
+Utilisateur : assanii
+
+[1] Informations système
+Noyau : 6.6.87.2-microsoft-standard-WSL2
+Démarrée : up 15 hours, 2 minutes
+
+Mémoire :
+               total        used        free      shared  buff/cache   available
+Mem:           7.6Gi       501Mi       7.1Gi       4.1Mi       133Mi       7.1Gi
+Swap:          2.0Gi          0B       2.0Gi
+
+Disque racine :
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sdd       1007G  2.4G  954G   1% /
+
+Les 5 processus les plus gourmands :
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+assanii     3909  300  0.0   9396  3968 pts/3    R+   17:22   0:00 ps aux --sort=-%cpu
+assanii     3897 33.3  0.0   7208  3456 pts/3    S+   17:22   0:00 /bin/bash ./audit.sh --system
+root          74  0.0  0.1  33580  9344 ?        Ss   02:19   0:13 /usr/lib/systemd/systemd-udevd
+root           6  0.0  0.0   3116  1920 ?        Sl   02:19   0:10 plan9 --control-socket 7 --log-level 4 --server-fd 8 --pipe-fd 10 --log-truncate
+assanii     1397  0.0  0.0   9764  6528 pts/3    Ss   05:19   0:01 -bash
+

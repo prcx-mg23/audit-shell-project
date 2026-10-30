@@ -1,0 +1,21 @@
+RAPPORT D'AUDIT
+Date : 2026-10-30 17:26:29
+Machine : root
+Utilisateur : assanii
+
+[3] Analyse de sécurité
+Comptes avec un shell bash : 
+root
+assanii
+
+Ports en écoute : 
+Netid State  Recv-Q Send-Q  Local Address:Port Peer Address:Port
+udp   UNCONN 0      0      10.255.255.254:53        0.0.0.0:*   
+udp   UNCONN 0      0           127.0.0.1:323       0.0.0.0:*   
+udp   UNCONN 0      0               [::1]:323          [::]:*   
+tcp   LISTEN 0      1000   10.255.255.254:53        0.0.0.0:*   
+
+Fichiers en mode 777 dans /home/assanii :
+/home/assanii/proj/audit-shell-project/test_777
+
+(Indicateurs à examiner, pas une preuve de vulnérabilité)

@@ -1,0 +1,10 @@
+RAPPORT D'AUDIT
+Date : 2026-10-30 17:24:42
+Machine : root
+Utilisateur : assanii
+
+[2] Test réseau
+[OK] 127.0.0.1 répond
+[ERREUR] 127.0.0.1 : port 22 fermé ou inaccessible
+[ERREUR] 192.0.2.10 ne répond pas
+[ERREUR] 192.0.2.10 : port 22 fermé ou inaccessible

@@ -1,0 +1,52 @@
+<html><head><meta charset="UTF-8"></head><body><pre>
+RAPPORT D'AUDIT
+Date : 2026-10-30 17:28:24
+Machine : root
+Utilisateur : assanii
+
+[1] Informations système
+Noyau : 6.6.87.2-microsoft-standard-WSL2
+Démarrée : up 15 hours, 8 minutes
+
+Mémoire :
+               total        used        free      shared  buff/cache   available
+Mem:           7.6Gi       505Mi       7.1Gi       4.1Mi       140Mi       7.1Gi
+Swap:          2.0Gi          0B       2.0Gi
+
+Disque racine :
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sdd       1007G  2.4G  954G   1% /
+
+Les 5 processus les plus gourmands :
+USER         PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root          74  0.0  0.1  33580  9344 ?        Ss   02:19   0:13 /usr/lib/systemd/systemd-udevd
+root           6  0.0  0.0   3116  1920 ?        Sl   02:19   0:10 plan9 --control-socket 7 --log-level 4 --server-fd 8 --pipe-fd 10 --log-truncate
+assanii     1397  0.0  0.0   9764  6528 pts/3    Ss   05:19   0:02 -bash
+root           1  0.0  0.1  23464 13172 ?        Ss   02:19   0:02 /sbin/init
+assanii      191  0.0  0.0   9340  6016 pts/0    Ss+  02:19   0:01 -bash
+
+[2] Test réseau
+[OK] 127.0.0.1 répond
+[ERREUR] 127.0.0.1 : port 22 fermé ou inaccessible
+[ERREUR] 192.0.2.10 ne répond pas
+[ERREUR] 192.0.2.10 : port 22 fermé ou inaccessible
+[3] Analyse de sécurité
+Comptes avec un shell bash : 
+root
+assanii
+
+Ports en écoute : 
+Netid State  Recv-Q Send-Q  Local Address:Port Peer Address:Port
+udp   UNCONN 0      0      10.255.255.254:53        0.0.0.0:*   
+udp   UNCONN 0      0           127.0.0.1:323       0.0.0.0:*   
+udp   UNCONN 0      0               [::1]:323          [::]:*   
+tcp   LISTEN 0      1000   10.255.255.254:53        0.0.0.0:*   
+
+Fichiers en mode 777 dans /home/assanii :
+/home/assanii/proj/audit-shell-project/test_777
+
+(Indicateurs à examiner, pas une preuve de vulnérabilité)
+[4] Résumé
+Tests OK : 1
+Tests en échec : 3
+</pre></body></html>
