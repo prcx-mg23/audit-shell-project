@@ -151,6 +151,7 @@ case "$1" in
 esac
 
 ecrire_resume
+journaliser "Audit $1 terminé"
 
 echo "Rapport créé : reports/$(basename "$RAPPORT")"
 if [ "$1" = "--network" ] || [ "$1" = "--all" ]; then
